@@ -27,7 +27,7 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Productos</h2>
-    <button class="btn btn-success" disabled>+ Nuevo Producto</button>
+    <button class="btn btn-success" routerLink="/products/new">+ Nuevo Producto</button>
   </div>
 
   <div *ngIf="loading" class="text-center">
@@ -68,7 +68,7 @@
           </td>
           <td>{{ product.min_stock }}</td>
           <td>
-            <button class="btn btn-sm btn-info me-1" disabled>Ver</button>
+            <button class="btn btn-sm btn-warning me-1" [routerLink]="['/products/edit', product.id]">Editar</button>
             <button class="btn btn-sm btn-danger" (click)="deleteProduct(product.id!)">Eliminar</button>
           </td>
         </tr>
