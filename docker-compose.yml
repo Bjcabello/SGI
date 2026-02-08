@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  db:
+    image: postgres:17-alpine
+    container_name: sgi_postgres
+    environment:
+      POSTGRES_DB: sgi_db
+      POSTGRES_USER: sgi_user
+      POSTGRES_PASSWORD: sgi_password_2024
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - sgi_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sgi_user -d sgi_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Django
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sgi_backend
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn --bind 0.0.0.0:8000 --workers 3 sgi.wsgi:application"
+    environment:
+      DEBUG: "False"
+      SECRET_KEY: "django-insecure-cambiar-en-produccion-con-clave-muy-segura-y-larga"
+      DB_NAME: sgi_db
+      DB_USER: sgi_user
+      DB_PASSWORD: sgi_password_2024
+      DB_HOST: db
+      DB_PORT: 5432
+      ALLOWED_HOSTS: "localhost,127.0.0.1,backend"
+    volumes:
+      - ./backend:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sgi_network
+
+  # Frontend Angular
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sgi_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - sgi_network
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+networks:
+  sgi_network:
+    driver: bridge
