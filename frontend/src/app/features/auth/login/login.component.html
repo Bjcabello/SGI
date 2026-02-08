@@ -1,1 +1,54 @@
-<p>login works!</p>
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+      <div class="card shadow">
+        <div class="card-body p-5">
+          <h2 class="text-center mb-4">Sistema de Inventario</h2>
+          <h4 class="text-center mb-4">Iniciar Sesión</h4>
+
+          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+          </div>
+
+          <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+            <div class="mb-3">
+              <label for="username" class="form-label">Usuario</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="username" 
+                name="username"
+                [(ngModel)]="credentials.username"
+                required
+                [disabled]="loading">
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="password"
+                name="password" 
+                [(ngModel)]="credentials.password"
+                required
+                [disabled]="loading">
+            </div>
+
+            <button 
+              type="submit" 
+              class="btn btn-primary w-100"
+              [disabled]="loading || !loginForm.valid">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ loading ? 'Ingresando...' : 'Ingresar' }}
+            </button>
+          </form>
+
+          <div class="text-center mt-3">
+            <p>¿No tienes cuenta? <a routerLink="/auth/register">Registrarse</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

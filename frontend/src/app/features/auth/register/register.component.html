@@ -1,1 +1,103 @@
-<p>register works!</p>
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h3 class="text-center mb-4">Registro de Usuario</h3>
+
+          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+          </div>
+
+          <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="first_name" class="form-label">Nombre</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="first_name"
+                  name="first_name"
+                  [(ngModel)]="userData.first_name"
+                  required
+                  [disabled]="loading">
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="last_name" class="form-label">Apellido</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="last_name"
+                  name="last_name"
+                  [(ngModel)]="userData.last_name"
+                  required
+                  [disabled]="loading">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="username" class="form-label">Usuario</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="username"
+                name="username"
+                [(ngModel)]="userData.username"
+                required
+                [disabled]="loading">
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email"
+                name="email"
+                [(ngModel)]="userData.email"
+                required
+                [disabled]="loading">
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="password"
+                name="password"
+                [(ngModel)]="userData.password"
+                required
+                [disabled]="loading">
+            </div>
+
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="confirmPassword"
+                name="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                required
+                [disabled]="loading">
+            </div>
+
+            <button 
+              type="submit" 
+              class="btn btn-primary w-100"
+              [disabled]="loading || !registerForm.valid">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ loading ? 'Registrando...' : 'Registrarse' }}
+            </button>
+          </form>
+
+          <div class="text-center mt-3">
+            <p>¿Ya tienes cuenta? <a routerLink="/auth/login">Iniciar Sesión</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

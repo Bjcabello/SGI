@@ -1,1 +1,87 @@
-<p>supplier-list works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">SGI - Sistema de Inventario</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" routerLink="/dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/products">Productos</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/categories">Categorías</a></li>
+        <li class="nav-item"><a class="nav-link active" routerLink="/suppliers">Proveedores</a></li>
+      </ul>
+      <button class="btn btn-outline-light btn-sm" (click)="logout()">Cerrar Sesión</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Proveedores</h2>
+    <button class="btn btn-success" (click)="newSupplier()">+ Nuevo Proveedor</button>
+  </div>
+
+  <div *ngIf="showForm" class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      {{ isEditing ? 'Editar' : 'Nuevo' }} Proveedor
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="saveSupplier()" #form="ngForm">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nombre Empresa</label>
+            <input type="text" class="form-control" [(ngModel)]="editingSupplier.name" name="name" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Contacto</label>
+            <input type="text" class="form-control" [(ngModel)]="editingSupplier.contact_name" name="contact_name" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="editingSupplier.email" name="email" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Teléfono</label>
+            <input type="text" class="form-control" [(ngModel)]="editingSupplier.phone" name="phone" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Dirección</label>
+          <textarea class="form-control" [(ngModel)]="editingSupplier.address" name="address" rows="2" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary me-2" [disabled]="!form.valid">Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelForm()">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center"><div class="spinner-border"></div></div>
+
+  <div *ngIf="!loading" class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Empresa</th>
+          <th>Contacto</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let supplier of suppliers">
+          <td>{{ supplier.name }}</td>
+          <td>{{ supplier.contact_name }}</td>
+          <td>{{ supplier.email }}</td>
+          <td>{{ supplier.phone }}</td>
+          <td>{{ supplier.address }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" (click)="editSupplier(supplier)">Editar</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteSupplier(supplier.id!)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

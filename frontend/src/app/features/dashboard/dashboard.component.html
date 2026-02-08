@@ -1,1 +1,111 @@
-<p>dashboard works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">SGI - Sistema de Inventario</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products" routerLinkActive="active">Productos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/categories" routerLinkActive="active">Categorías</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/suppliers" routerLinkActive="active">Proveedores</a>
+        </li>
+      </ul>
+      <div class="d-flex align-items-center text-white">
+        <span class="me-3">👤 {{ currentUser?.username }}</span>
+        <button class="btn btn-outline-light btn-sm" (click)="logout()">Cerrar Sesión</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h2>Dashboard</h2>
+  <p class="text-muted">Bienvenido, {{ currentUser?.first_name }} {{ currentUser?.last_name }}</p>
+
+  <div class="row mt-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Total Productos</h5>
+          <h2>{{ totalProducts }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-warning mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Stock Bajo</h5>
+          <h2>{{ lowStockProducts.length }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-success mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Sistema Activo</h5>
+          <h2>✓</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4" *ngIf="lowStockProducts.length > 0">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-warning text-white">
+          <h5 class="mb-0">⚠️ Productos con Stock Bajo</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>SKU</th>
+                  <th>Cantidad Actual</th>
+                  <th>Stock Mínimo</th>
+                  <th>Categoría</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let product of lowStockProducts">
+                  <td>{{ product.name }}</td>
+                  <td>{{ product.sku }}</td>
+                  <td><span class="badge bg-danger">{{ product.quantity }}</span></td>
+                  <td>{{ product.min_stock }}</td>
+                  <td>{{ product.category_name }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5>Accesos Rápidos</h5>
+          <div class="d-grid gap-2 d-md-flex">
+            <a routerLink="/products" class="btn btn-primary">Ver Productos</a>
+            <a routerLink="/categories" class="btn btn-secondary">Gestionar Categorías</a>
+            <a routerLink="/suppliers" class="btn btn-info text-white">Gestionar Proveedores</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
