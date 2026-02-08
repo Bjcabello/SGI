@@ -31,15 +31,8 @@ services:
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput &&
              gunicorn --bind 0.0.0.0:8000 --workers 3 sgi.wsgi:application"
-    environment:
-      DEBUG: "False"
-      SECRET_KEY: "django-insecure-cambiar-en-produccion-con-clave-muy-segura-y-larga"
-      DB_NAME: sgi_db
-      DB_USER: sgi_user
-      DB_PASSWORD: sgi_password_2024
-      DB_HOST: db
-      DB_PORT: 5432
-      ALLOWED_HOSTS: "localhost,127.0.0.1,backend"
+    env_file:
+      - ./backend/.env
     volumes:
       - ./backend:/app
       - static_volume:/app/staticfiles
